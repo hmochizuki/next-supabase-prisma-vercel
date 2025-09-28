@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## プロジェクト概要
 
-これは Next.js 15.5.4、Supabase、Prisma 6.16.2 を使用したフルスタック Web アプリケーションのテンプレートです。
+これは Next.js 15.5.4とPrisma 6.16.2 を使用したフルスタック Web アプリケーションのテンプレートです。Supabaseや他のPostgreSQLサービスと組み合わせて使用できます。
 
 ## 主要なコマンド
 
@@ -22,7 +22,7 @@ pnpm prisma:migrate   # 開発環境でのマイグレーション実行
 pnpm prisma:studio    # Prisma Studioの起動（データベース管理GUI）
 ```
 
-### Supabase
+### Supabase (オプション)
 ```bash
 pnpm supabase:start    # ローカルSupabaseの起動
 pnpm supabase:stop     # ローカルSupabaseの停止
@@ -48,14 +48,9 @@ src/
 ├── components/       # 共通コンポーネント
 ├── hooks/            # カスタムフック
 ├── lib/              # ライブラリ設定
-│   ├── prisma.ts     # Prismaクライアントのシングルトン実装
-│   └── supabase/     
-│       ├── client.ts # クライアントサイドSupabaseクライアント
-│       └── server.ts # サーバーサイドSupabaseクライアント
+│   └── prisma.ts     # Prismaクライアントのシングルトン実装
 ├── types/            # TypeScript型定義
-│   └── database.ts   # Supabaseデータベース型定義
-├── utils/            # ユーティリティ関数
-└── middleware.ts     # 認証ミドルウェア
+└── utils/            # ユーティリティ関数
 ```
 
 ### Next.js App Router
@@ -72,15 +67,6 @@ src/
   - `DATABASE_URL`: 接続プーリング用（アプリケーションで使用）
   - `DIRECT_URL`: 直接接続用（マイグレーションで使用）
 
-#### Supabase
-- PostgreSQLベースのBaaS
-- 認証、リアルタイムデータベース、ストレージ機能を提供
-- クライアント実装:
-  - `src/lib/supabase/client.ts`: ブラウザ用クライアント
-  - `src/lib/supabase/server.ts`: サーバーコンポーネント用クライアント
-- 環境変数:
-  - `NEXT_PUBLIC_SUPABASE_URL`: SupabaseプロジェクトのURL
-  - `NEXT_PUBLIC_SUPABASE_ANON_KEY`: 公開用の匿名キー
 
 ### Prismaスキーマ (`prisma/schema.prisma`)
 ```prisma
@@ -101,10 +87,8 @@ model Post {
 }
 ```
 
-### 認証フロー
-- `src/middleware.ts`で認証状態をチェック
-- 未認証ユーザーは`/login`へリダイレクト
-- Supabase Authを使用したセッション管理
+### 認証
+認証機能が必要な場合は、NextAuthやAuth.jsなどのライブラリを導入してください。
 
 ### スタイリング
 - Tailwind CSS v4を採用
@@ -135,16 +119,6 @@ const prisma = new PrismaClient();
 import { prisma } from "@/lib/prisma";
 ```
 
-### Supabaseクライアントの使用
-```typescript
-// クライアントコンポーネント
-import { createClient } from "@/lib/supabase/client";
-const supabase = createClient();
-
-// サーバーコンポーネント/Server Actions
-import { createClient } from "@/lib/supabase/server";
-const supabase = await createClient();
-```
 
 ### Server Actions
 - `"use server"` ディレクティブを使用してサーバーサイドの処理を実装
@@ -158,7 +132,7 @@ const supabase = await createClient();
 
 ### ベストプラクティス
 1. データベースクエリは必ずtry-catchでエラーハンドリング
-2. 認証が必要なルートはmiddleware.tsで保護
+2. 認証が必要な場合は適切なライブラリを導入
 3. 型定義は`src/types/`に集約
 4. 共通ロジックは`src/utils/`に実装
 5. UIコンポーネントは`src/components/`で管理
