@@ -1,12 +1,12 @@
-# Next.js + Supabase + Prisma テンプレート
+# Next.js + Prisma テンプレート
 
-このプロジェクトは、Next.js 15、Supabase、Prismaを組み合わせたモダンなフルスタックWebアプリケーションのテンプレートです。
+このプロジェクトは、Next.js 15とPrismaを組み合わせたモダンなフルスタックWebアプリケーションのテンプレートです。
 
 ## 技術スタック
 
 - **Next.js 15.5.4** - React フレームワーク（App Router使用）
-- **Supabase** - PostgreSQLベースのBaaS
 - **Prisma 6.16.2** - TypeScript向けORM
+- **PostgreSQL** - データベース（Supabaseまたは他のPostgreSQLサービス）
 - **React 19.1.0** - UIライブラリ
 - **TypeScript** - 型安全な開発
 - **Tailwind CSS v4** - ユーティリティファーストCSS
@@ -20,8 +20,7 @@ src/
 ├── components/       # 共通コンポーネント
 ├── hooks/            # カスタムフック
 ├── lib/              # ライブラリ設定
-│   ├── prisma.ts     # Prismaクライアント（シングルトン）
-│   └── supabase/     # Supabaseクライアント設定
+│   └── prisma.ts     # Prismaクライアント（シングルトン）
 ├── types/            # TypeScript型定義
 └── utils/            # ユーティリティ関数
 ```
@@ -37,10 +36,8 @@ cp .env.example .env.local
 ```
 
 必要な環境変数：
-- `DATABASE_URL`: Supabaseのデータベース接続URL（接続プーリング用）
+- `DATABASE_URL`: データベース接続URL（接続プーリング用）
 - `DIRECT_URL`: 直接接続URL（マイグレーション用）
-- `NEXT_PUBLIC_SUPABASE_URL`: SupabaseプロジェクトのURL
-- `NEXT_PUBLIC_SUPABASE_ANON_KEY`: Supabaseの匿名キー
 
 ### 2. 依存関係のインストール
 
@@ -81,7 +78,7 @@ pnpm dev
 - `pnpm prisma:migrate` - マイグレーションの実行
 - `pnpm prisma:studio` - Prisma Studioの起動
 
-### Supabase
+### Supabase (オプション)
 - `pnpm supabase:start` - ローカルSupabaseの起動
 - `pnpm supabase:stop` - ローカルSupabaseの停止
 - `pnpm supabase:restart` - ローカルSupabaseの再起動
@@ -101,7 +98,7 @@ pnpm dev
 
 ## 認証について
 
-`src/middleware.ts`に基本的な認証ミドルウェアのテンプレートが含まれています。必要に応じてカスタマイズしてください。
+認証機能が必要な場合は、NextAuthやAuth.jsなどのライブラリを導入してください。
 
 ## デプロイ
 
